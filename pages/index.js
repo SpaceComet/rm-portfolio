@@ -1,18 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 //import { Environment, OrbitControls } from "@react-three/drei";
 import { useSpring, animated } from 'react-spring'
-import { Suspense } from "react";
+import Camera from '../components/camera';
 import Lights from "../components/lights"
 import MainModel from '../components/mainModel'
 import { Box } from '../components/rmGeos';
 import { GridHelper } from 'three';
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing'
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, useProgress, Html } from '@react-three/drei';
 import Robot01 from "../components/Robot01"
 import SteamMachine from "../components/SteamMachine"
 
-const isOrbitControls = true;
+const isOrbitControls = false;
 
 let camPos = {
     x: 0,
@@ -45,17 +45,25 @@ let camPosList = [
     }
 ]
 
+function Loader() {
+    const { active, progress, errors, item, loaded, total } = useProgress()
+    console.log(progress);
+    return(
+        <Html center>{progress} % loaded</Html>
+    )
+}
+
 function Dolly() {
 
     const { viewport, mouse, size } = useThree();
     const rmCam = useThree((state) => state.camera)
 
-    const { spring } = useSpring({
+    /*const { spring } = useSpring({
         spring: active,
         config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 },
-    });
+    });*/
 
-    console.log(active);
+    //console.log(active);
 
     // This one makes the camera move in and out
     useFrame(({ clock, camera }) => {
@@ -66,7 +74,7 @@ function Dolly() {
             console.log("rmCam: ", rmCam);
         }
 
-        //camera.aspect = size.width / size.height;
+        camera.aspect = size.width / size.height;
 
         /*camera.position.x = camPosList[0].position.x;
         camera.position.y = camPosList[0].position.y;
@@ -82,6 +90,7 @@ function Dolly() {
     })
     return null
 }
+
 export default function Home() {
 
     const [camPosN, setCamPosN] = useState(0);
@@ -91,23 +100,30 @@ export default function Home() {
             <div className="bg-gray-900 h-screen w-screen">
                 <Canvas
                     colorManagement
-                    camera={{ 
-                        fov: 75,
-                        position: [0.73, .88, 0.84],
-                        rotation: [-0.27, 0.44, 0.12]
-                    }}
                     gl={{ powerPreference: "high-performance", alpha: false, antialias: false, stencil: false}}
+                    
                 > 
+
+                    {true && <Camera 
+                        fov={75}
+                        position={[0.73, .88, 0.84]} 
+                        rotation={[-0.27, 0.44, 0.12]} 
+                        far={1000}
+                        aspect={1}
+                    />}
+
                     <color attach="background" args={["#050505"]} />
                     <fog color="#161616" attach="fog" near={8} far={30} />
+
                     { isOrbitControls && <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} /> }
                     {/*<gridHelper args={[100, 100]}/>*/}
                     <Lights />
 
-                    <Suspense fallback={null}>
-                        <SteamMachine onClick={() => setCamPosN(Number(!active))}/>
+                    <Suspense fallback={<Loader />}>
+                        <SteamMachine onClick={ () => console.log("CLICK")}/>
                     </Suspense>
-                    <Dolly />
+                    
+                    {false && <Dolly />}
 
                     <EffectComposer>
                         <DepthOfField focusDistance={3} focalLength={0.1} bokehScale={8} />
