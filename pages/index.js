@@ -205,12 +205,13 @@ export default function Home() {
                         <div className={` 
                             ${ isDesktop && "bg-gray-800"}
                             ${ isMobile && "bg-gray-800"}
-                            flex w-5/6 md:w-2/4 h-2/6 md:h-1/2 items-center justify-center rounded-lg`
+                            flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
                         }>
+                            <p className="font-simplifica text-white text-4xl mb-2">2021 Demo Reel</p>
                             <ReactPlayer 
                                 url="https://vimeo.com/599954436"
                                 width='100%'
-          height='100%'
+                                height='100%'
                             />
                         </div>
                     </div>
