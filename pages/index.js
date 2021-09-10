@@ -207,11 +207,21 @@ export default function Home() {
                             ${ isMobile && "bg-gray-800"}
                             flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
                         }>
-                            <p className="font-simplifica text-white text-4xl mb-2">2021 Demo Reel</p>
+                            <p className="font-simplifica text-white text-xl md:text-4xl md:mb-2">2021 Demo Reel</p>
                             <ReactPlayer 
                                 url="https://vimeo.com/599954436"
                                 width='100%'
                                 height='100%'
+                                config={{
+                                    vimeo: {
+                                        playerOptions: { 
+                                            controls: false,
+                                            portrait: false,
+                                            title: false,
+                                            byline: false,
+                                        }
+                                    }
+                                }}
                             />
                         </div>
                     </div>
