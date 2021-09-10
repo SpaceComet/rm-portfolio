@@ -1,7 +1,8 @@
-import React, { useRef, useState, Suspense } from 'react'
+import React, { useRef, useState, Suspense, useCallback } from 'react'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 //import { Environment, OrbitControls } from "@react-three/drei";
 import { useSpring, animated } from 'react-spring'
+import { useDrag } from 'react-use-gesture';
 import Camera from '../components/camera';
 import Lights from "../components/lights"
 import MainModel from '../components/mainModel'
@@ -11,6 +12,8 @@ import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-thr
 import { OrbitControls, useProgress, Html } from '@react-three/drei';
 import Robot01 from "../components/Robot01"
 import SteamMachine from "../components/SteamMachine"
+import { isMobile, isDesktop, browserName } from 'react-device-detect';
+import ReactPlayer from 'react-player';
 
 const isOrbitControls = false;
 
@@ -91,14 +94,73 @@ function Dolly() {
     return null
 }
 
+const covers = [
+    '/covers/cover_seeds.jpg',
+    '/covers/cover_LeagueOfGods.jpg',
+    'cover_HigherPower.jpg',
+]
+
+function Viewpager() {
+    const index = useRef(0);
+    const width = window.innerWidth
+  
+    const [props, api] = useSprings(covers.length, i => ({
+        x: i * width,
+        scale: 1,
+        display: 'block',
+    }))
+
+    const bind = useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
+      if (active && Math.abs(mx) > width / 10) {
+        index.current = clamp(index.current + (xDir > 0 ? -1 : 1), 0, covers.length - 1)
+        cancel()
+      }
+      api.start(i => {
+        if (i < index.current - 1 || i > index.current + 1) return { display: 'none' }
+        const x = (i - index.current) * width + (active ? mx : 0)
+        const scale = active ? 1 - Math.abs(mx) / width / 2 : 1
+        return { x, scale, display: 'block' }
+      })
+    })
+
+    return (
+        <div className={styles.wrapper}>
+            {props.map(({ x, display, scale }, i) => (
+                <animated.div className={styles.page} {...bind()} key={i} style={{ display, x }}>
+                <animated.div style={{ scale, backgroundImage: `url(${covers[i]})` }} />
+                </animated.div>
+            ))}
+        </div>
+    )
+}
+
 export default function Home() {
 
     const [camPosN, setCamPosN] = useState(0);
 
+    const { spring } = useSpring({
+        spring: camPosN,
+        config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 }
+    })
+
+    const { tmpPos } = useSpring({
+        tmpPos: camPosN ? [0.73, .88, 0.84] : [ 1.64, 0.48, 0.30] ,
+        config: { mass: 10, tension: 1000, friction: 300, precision: 0.00001 }
+    })
+
+    //const pZ = spring.to([0.84, 1], [1, .94])
+    //const rotation = spring.to((x) => console.log(x))
+    const scale = spring.to([0, 1], [1, 2])
+    
+
+    //console.log(pZ);
+
+
     return (
         <>
-            <div className="bg-gray-900 h-screen w-screen">
+            <div className="relative bg-gray-900 h-screen w-screen">
                 <Canvas
+                    className="absolute z-10"
                     colorManagement
                     gl={{ powerPreference: "high-performance", alpha: false, antialias: false, stencil: false}}
                     
@@ -110,6 +172,9 @@ export default function Home() {
                         rotation={[-0.27, 0.44, 0.12]} 
                         far={1000}
                         aspect={1}
+
+                        position-x = {scale}
+                       
                     />}
 
                     <color attach="background" args={["#050505"]} />
@@ -120,13 +185,13 @@ export default function Home() {
                     <Lights />
 
                     <Suspense fallback={<Loader />}>
-                        <SteamMachine onClick={ () => console.log("CLICK")}/>
+                        <SteamMachine onClick={ () => setCamPosN(Number(!camPosN)) }/>
                     </Suspense>
                     
                     {false && <Dolly />}
 
                     <EffectComposer>
-                        <DepthOfField focusDistance={3} focalLength={0.1} bokehScale={8} />
+                        <DepthOfField focusDistance={3} focalLength={0.1} bokehScale={6} />
                         {/*<Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={3} />*/}
                         <Noise opacity={0.025} />
                         <Vignette eskil={false} offset={0.1} darkness={1.1} />
@@ -134,6 +199,22 @@ export default function Home() {
 
 
                 </Canvas>
+
+                <div className="absolute inset-0  z-50">
+                    <div className="flex flex-col w-full h-full items-center justify-center">
+                        <div className={` 
+                            ${ isDesktop && "bg-gray-800"}
+                            ${ isMobile && "bg-gray-800"}
+                            flex w-5/6 md:w-2/4 h-2/6 md:h-1/2 items-center justify-center rounded-lg`
+                        }>
+                            <ReactPlayer 
+                                url="https://vimeo.com/599954436"
+                                width='100%'
+          height='100%'
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </>
     )

@@ -1,5 +1,7 @@
 import React, { useRef, useEffect } from "react"
 import { useFrame, useThree } from "@react-three/fiber"
+import { useSpring, animated } from 'react-spring'
+import { a } from '@react-spring/three'
 
 /*
 camera={{ 
@@ -13,6 +15,7 @@ camera={{
 
 export default function Camera(props) {
     const ref = useRef();
+
     //const set = useThree(state => state.set);
     const { size, set } = useThree()
 
@@ -24,7 +27,7 @@ export default function Camera(props) {
     
     return (
 
-        <perspectiveCamera 
+        <a.perspectiveCamera 
             ref={ref} {...props} 
             aspect={size.width / size.height}
             radius={(size.width + size.height) / 4}

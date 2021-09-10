@@ -22,20 +22,22 @@ export default function Model(props) {
                 <group name="Armature" position={[-0.03, 0, 0]}>
                     <primitive object={nodes.Armature_rootJoint} />
                     <skinnedMesh
-                    geometry={nodes.SteamEngine_0.geometry}
-                    material={materials.Metal}
-                    skeleton={nodes.SteamEngine_0.skeleton}
+                        geometry={nodes.SteamEngine_0.geometry}
+                        //material={materials.Metal}
+                        skeleton={nodes.SteamEngine_0.skeleton}
                     />
                     <skinnedMesh
                         geometry={nodes.SteamEngine_1.geometry}
-                        material={materials.Painted}
+                        //material={materials.Painted}
                         skeleton={nodes.SteamEngine_1.skeleton}
                     >
+                        {/* Testing material's opacity */}
+                        <meshStandardMaterial roughness={0.5} attach="material" color={"#2d2d2d"} opacity={.4} transparent={true}/>
                     </skinnedMesh>
                 
                     <skinnedMesh
                     geometry={nodes.SteamEngine_2.geometry}
-                    material={materials.Wood}
+                    //material={materials.Wood}
                     skeleton={nodes.SteamEngine_2.skeleton}
                     />
                     <skinnedMesh
