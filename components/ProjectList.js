@@ -20,12 +20,12 @@ export default function ProjectList({ tittleList, tittleHovered, setTittleHovere
     }, [tittleHovered]);
 
     return(
-        <div className="flex flex-col h-full w-full z-40 items-start justify-center">{
+        <div className="flex flex-col h-full w-full z-30 items-start justify-center">{
             tittleList.map((nMovie) => {
                 const tmpKey = nMovie.tittle.replace(/ /g, '');
                 return(
                     <animated.div 
-                        className="font-simplifica text-white text-6xl ml-20 mb-5"
+                        className="font-simplifica text-white text-6xl ml-10 mb-5 cursor-pointer"
                         style={{
                             scale: props[nMovie.index].scale,
                             filter: props[nMovie.index].blur.to(s => `blur(${s}px)`)

@@ -120,11 +120,14 @@ export default function Home() {
     // List of projects Hooks
     const [tittleHovered, setTittleHovered] = useState(0);
 
+    // Reel modal hook
+    const [isReelModalOn, setReelModal] = useState(false);
+
     const [camPosN, setCamPosN] = useState(0);
 
     const { spring } = useSpring({
         spring: camPosN,
-        config: { mass: 5, tension: 400, friction: 50, precision: 0.0001 }
+        config: { mass: 1, tension: 600, friction: 30, precision: 0.0001 }
     })
 
     const { tmpPos } = useSpring({
@@ -144,7 +147,7 @@ export default function Home() {
         <>
             <div className="relative bg-gray-900 h-screen w-screen">
                 <Canvas
-                    className="absolute z-10"
+                    className="absolute z-0"
                     colorManagement
                     gl={{ powerPreference: "high-performance", alpha: false, antialias: false, stencil: false}}
                     //linear={true} // You might use this to avoid banding...
@@ -189,15 +192,35 @@ export default function Home() {
 
                 </Canvas>
 
-                <div className="absolute inset-0 z-20 overflow-hidden">
+                <div className="absolute inset-0 z-10 overflow-hidden">
                     <div className="flex w-full h-full items-center justify-center">
                         <div className="flex flex-row w-full h-full">
-                            <div className="flex bg-gray-800 w-5/12 bg-opacity-30">
-                                <ProjectList
-                                    tittleList={tittleList}
-                                    tittleHovered={tittleHovered}
-                                    setTittleHovered={setTittleHovered}
-                                />
+                            <div className="flex flex-row bg-gray-800 w-5/12 bg-opacity-30">
+                                <div className="flex w-2/12 h-full justify-center items-center">
+                                    <div className="font-simplifica text-yellow-300 text-4xl tracking-widest">
+                                        <p className="transform -rotate-90">
+                                            Projects
+                                        </p>
+                                    </div>
+                                    
+                                </div>
+                                <div className="flex flex-col w-10/12 h-full">
+                                    <div className="absolute z-50">
+                                        <button 
+                                            className=" transition duration-200 mt-20 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
+                                            onClick={() => setReelModal(true)}>
+                                            <p className="font-simplifica  text-yellow-300 text-4xl tracking-widest "> Check latest Reel </p>
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center h-full z-10">
+                                        <ProjectList
+                                            tittleList={tittleList}
+                                            tittleHovered={tittleHovered}
+                                            setTittleHovered={setTittleHovered}
+                                        />
+                                    </div>
+                                    
+                                </div>
                             </div>
                             <div className="flex bg-gray-900 w-7/12 bg-opacity-0">
                                 <CoverList
@@ -206,28 +229,43 @@ export default function Home() {
                                 />
                             </div>
                         </div>
-                        {/*<div className={` 
-                            ${ (isDesktop || isTablet) && "bg-gray-800"}
-                            ${ isMobileOnly && "bg-gray-800"}
-                            flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
-                        }>
-                            <p className="font-simplifica text-white text-xl md:text-4xl md:mb-2">2021 Demo Reel</p>
-                            <ReactPlayer 
-                                url="https://vimeo.com/599954436"
-                                width='100%'
-                                height='100%'
-                                config={{
-                                    vimeo: {
-                                        playerOptions: { 
-                                            controls: false,
-                                            portrait: false,
-                                            title: false,
-                                            byline: false,
-                                        }
-                                    }
-                                }}
-                            />
-                        </div>*/}
+
+                        {
+                            isReelModalOn &&
+                            <div className="absolute z-50 bg-gray-900 bg-opacity-90 w-screen h-screen">
+                                <div className="flex h-full items-center justify-center">
+                                    <div className={` 
+                                        ${ (isDesktop || isTablet) && "bg-gray-800"}
+                                        ${ isMobileOnly && "bg-gray-800"}
+                                        flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
+                                    }>
+                                        <div className=" w-full items-start">
+                                            <div 
+                                                className="flex w-6 h-6 bg-gray-500 hover:bg-gray-900 rounded-lg cursor-pointer items-center justify-center"
+                                                onClick={ () => setReelModal(false)}>
+                                                X
+                                            </div>
+                                        </div>
+                                        <p className="font-simplifica text-white text-xl md:text-4xl md:mb-2">2021 Demo Reel</p>
+                                        <ReactPlayer 
+                                            url="https://vimeo.com/599954436"
+                                            width='100%'
+                                            height='100%'
+                                            config={{
+                                                vimeo: {
+                                                    playerOptions: { 
+                                                        controls: false,
+                                                        portrait: false,
+                                                        title: false,
+                                                        byline: false,
+                                                    }
+                                                }
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

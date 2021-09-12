@@ -31,7 +31,7 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
         scale: 1,
         blur: 6,
         opacity: 1,
-        config: { mass: 3, tension: 600, friction: 30, precision: 0.0001 },
+        config: { mass: 1, tension: 600, friction: 30, precision: 0.0001 },
     }));
     
     useEffect(() => {
@@ -51,13 +51,13 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
     }, [selectedCoverHook]);
 
     return(
-        <div className="flex flex-row h-full w-full z-30 items-center ">{
+        <div className="flex flex-row h-full w-full z-20 items-center ">{
             [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
                 let tmpKey = undefined;
                 if (nMovieI == 0)
-                    tmpKey = "cover_"+tittleList[lastTittleI].tittle.replace(/ /g, '');
+                    tmpKey = "coverCopy_"+tittleList[lastTittleI].tittle.replace(/ /g, '');
                 else if (nMovieI == lastTittleI+extraCovers)
-                    tmpKey = "cover_"+tittleList[0].tittle.replace(/ /g, '');
+                    tmpKey = "coverCopy_"+tittleList[0].tittle.replace(/ /g, '');
                 else
                     tmpKey = "cover_"+tittleList[nMovieI-(extraCovers/2)].tittle.replace(/ /g, '');
 
@@ -74,7 +74,7 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
                         key={tmpKey}
                     >
                         <Image 
-                            src={`/covers/${tmpKey}.jpg`}
+                            src={`/covers/${tmpKey.replace(/coverCopy_/, 'cover_')}.jpg`}
                             width={coverImg.w}
                             height={coverImg.h}
                             quality={50}
