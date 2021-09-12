@@ -21,11 +21,13 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
 
     }
 
-    const [tittleHovered, setTittleHovered] = useState(0);
+    // It has to be an even number
+    const extraCovers = 2;
+    const lastTittleI = tittleList.length - 1;
 
-    const [props, api] = useSprings(tittleList.length, nTittle => ({
-        x: (coverImg.w*nTittle) + coverImg.offset.x,
-        y: (coverImg.h*nTittle),
+    const [props, api] = useSprings(tittleList.length+extraCovers, nTittle => ({
+        x: (coverImg.w*(nTittle-(extraCovers/2))) + coverImg.offset.x,
+        y: (coverImg.h*(nTittle-(extraCovers/2))),
         scale: 1,
         blur: 6,
         opacity: 1,
@@ -34,33 +36,40 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
     
     useEffect(() => {
         api.start(i => {
-            let pIndex = i - selectedCoverHook;
-            if (selectedCoverHook == 0 && i == tittleList.length-1)
-                pIndex = -1;
+            let pIndex = i - selectedCoverHook - (extraCovers/2);
+            //if (selectedCoverHook == 0 && i == lastTittleI)
+                //pIndex = -1;
 
             return ({
                 x: pIndex * (coverImg.w+coverImg.margin.x) + coverImg.offset.x,
                 y: pIndex * (coverImg.h+coverImg.margin.x) * -.5,
-                scale : selectedCoverHook == i ? 1.1 : 1,
-                blur : selectedCoverHook == i ? 0 : 6,
-                opacity : selectedCoverHook == i ? 1 : 0.7,
+                scale : selectedCoverHook == i - (extraCovers/2) ? 1.1 : 1,
+                blur : selectedCoverHook == i - (extraCovers/2) ? 0 : 6,
+                opacity : selectedCoverHook == i - (extraCovers/2) ? 1 : 0.7,
             })
         });
     }, [selectedCoverHook]);
 
     return(
         <div className="flex flex-row h-full w-full z-30 items-center ">{
-            tittleList.map((nMovie) => {
-                const tmpKey = "cover_"+nMovie.tittle.replace(/ /g, '');
+            [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
+                let tmpKey = undefined;
+                if (nMovieI == 0)
+                    tmpKey = "cover_"+tittleList[lastTittleI].tittle.replace(/ /g, '');
+                else if (nMovieI == lastTittleI+extraCovers)
+                    tmpKey = "cover_"+tittleList[0].tittle.replace(/ /g, '');
+                else
+                    tmpKey = "cover_"+tittleList[nMovieI-(extraCovers/2)].tittle.replace(/ /g, '');
+
                 return(
                     <animated.div 
                         className="absolute  "
                         style={{
-                            x: props[nMovie.index].x,
-                            y: props[nMovie.index].y,
-                            scale: props[nMovie.index].scale,
-                            filter: props[nMovie.index].blur.to(s => `blur(${s}px)`),
-                            opacity: props[nMovie.index].opacity,
+                            x: props[nMovieI].x,
+                            y: props[nMovieI].y,
+                            scale: props[nMovieI].scale,
+                            filter: props[nMovieI].blur.to(s => `blur(${s}px)`),
+                            opacity: props[nMovieI].opacity,
                         }}
                         key={tmpKey}
                     >
