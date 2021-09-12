@@ -1,21 +1,21 @@
-import React, { useRef, useState, Suspense, useCallback } from 'react'
+import React, { useRef, useState, Suspense, useCallback, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 //import { Environment, OrbitControls } from "@react-three/drei";
-import { useSpring, animated } from 'react-spring'
-import { useDrag } from 'react-use-gesture';
+import { useSpring, useSprings, animated } from 'react-spring'
+import { useDrag, useHover } from 'react-use-gesture';
 import Camera from '../components/camera';
 import Lights from "../components/lights"
-import MainModel from '../components/mainModel'
-import { Box } from '../components/rmGeos';
 import { GridHelper } from 'three';
 import { EffectComposer, DepthOfField, Bloom, Noise, Vignette } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
 import { OrbitControls, useProgress, Html } from '@react-three/drei';
-import Robot01 from "../components/Robot01"
 import SteamMachine from "../components/SteamMachine"
-import { isMobile, isDesktop, browserName } from 'react-device-detect';
+import { isMobileOnly, isTablet, isDesktop, browserName, BrowserView, MobileView, } from 'react-device-detect';
 import ReactPlayer from 'react-player';
+import ProjectList from '../components/ProjectList';
+import CoverList from '../components/CoverList';
 
-const isOrbitControls = false;
+const isOrbitControls = true;
 
 let camPos = {
     x: 0,
@@ -94,47 +94,31 @@ function Dolly() {
     return null
 }
 
+const tittleList = [
+    {
+        index: 0,
+        tittle: 'League of Gods',
+    },
+    {
+        index: 1,
+        tittle: 'Seeds',
+    },
+    {
+        index: 2,
+        tittle: 'Higher Power',
+    },
+]
+
 const covers = [
     '/covers/cover_seeds.jpg',
     '/covers/cover_LeagueOfGods.jpg',
     'cover_HigherPower.jpg',
 ]
 
-function Viewpager() {
-    const index = useRef(0);
-    const width = window.innerWidth
-  
-    const [props, api] = useSprings(covers.length, i => ({
-        x: i * width,
-        scale: 1,
-        display: 'block',
-    }))
-
-    const bind = useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
-      if (active && Math.abs(mx) > width / 10) {
-        index.current = clamp(index.current + (xDir > 0 ? -1 : 1), 0, covers.length - 1)
-        cancel()
-      }
-      api.start(i => {
-        if (i < index.current - 1 || i > index.current + 1) return { display: 'none' }
-        const x = (i - index.current) * width + (active ? mx : 0)
-        const scale = active ? 1 - Math.abs(mx) / width / 2 : 1
-        return { x, scale, display: 'block' }
-      })
-    })
-
-    return (
-        <div className={styles.wrapper}>
-            {props.map(({ x, display, scale }, i) => (
-                <animated.div className={styles.page} {...bind()} key={i} style={{ display, x }}>
-                <animated.div style={{ scale, backgroundImage: `url(${covers[i]})` }} />
-                </animated.div>
-            ))}
-        </div>
-    )
-}
-
 export default function Home() {
+
+    // List of projects Hooks
+    const [tittleHovered, setTittleHovered] = useState(0);
 
     const [camPosN, setCamPosN] = useState(0);
 
@@ -163,6 +147,7 @@ export default function Home() {
                     className="absolute z-10"
                     colorManagement
                     gl={{ powerPreference: "high-performance", alpha: false, antialias: false, stencil: false}}
+                    //linear={true} // You might use this to avoid banding...
                     
                 > 
 
@@ -191,20 +176,39 @@ export default function Home() {
                     {false && <Dolly />}
 
                     <EffectComposer>
-                        <DepthOfField focusDistance={3} focalLength={0.1} bokehScale={6} />
+                        <DepthOfField focusDistance={3} focalLength={0.1} bokehScale={3} />
                         {/*<Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} opacity={3} />*/}
-                        <Noise opacity={0.025} />
+                        <Noise
+                            //opacity={ isDesktop ? 0.050 : 0.025}
+                            premultiply
+                            blendFunction={BlendFunction.ADD}
+                        />
                         <Vignette eskil={false} offset={0.1} darkness={1.1} />
                     </EffectComposer>
 
 
                 </Canvas>
 
-                <div className="absolute inset-0  z-50">
-                    <div className="flex flex-col w-full h-full items-center justify-center">
-                        <div className={` 
-                            ${ isDesktop && "bg-gray-800"}
-                            ${ isMobile && "bg-gray-800"}
+                <div className="absolute inset-0 z-20 overflow-hidden">
+                    <div className="flex w-full h-full items-center justify-center">
+                        <div className="flex flex-row w-full h-full">
+                            <div className="flex bg-gray-800 w-5/12 bg-opacity-30">
+                                <ProjectList
+                                    tittleList={tittleList}
+                                    tittleHovered={tittleHovered}
+                                    setTittleHovered={setTittleHovered}
+                                />
+                            </div>
+                            <div className="flex bg-gray-900 w-7/12 bg-opacity-0">
+                                <CoverList
+                                    tittleList={tittleList}
+                                    selectedCoverHook={tittleHovered}
+                                />
+                            </div>
+                        </div>
+                        {/*<div className={` 
+                            ${ (isDesktop || isTablet) && "bg-gray-800"}
+                            ${ isMobileOnly && "bg-gray-800"}
                             flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
                         }>
                             <p className="font-simplifica text-white text-xl md:text-4xl md:mb-2">2021 Demo Reel</p>
@@ -223,7 +227,7 @@ export default function Home() {
                                     }
                                 }}
                             />
-                        </div>
+                        </div>*/}
                     </div>
                 </div>
             </div>

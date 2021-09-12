@@ -25,31 +25,64 @@ export default function Model(props) {
                         geometry={nodes.SteamEngine_0.geometry}
                         //material={materials.Metal}
                         skeleton={nodes.SteamEngine_0.skeleton}
-                    />
+                    >
+                        {
+                            true &&
+                            <meshStandardMaterial
+                                roughness={.4}
+                                metalness={1}
+                                attach="material"
+                                color={"#A3A3A3"}
+                                attach="material"
+                                opacity={.1}
+                                transparent={true}
+                            />
+                        }
+                    </skinnedMesh>
+
+
                     <skinnedMesh
                         geometry={nodes.SteamEngine_1.geometry}
                         //material={materials.Painted}
                         skeleton={nodes.SteamEngine_1.skeleton}
                     >
                         {/* Testing material's opacity */}
-                        <meshStandardMaterial roughness={0.5} attach="material" color={"#2d2d2d"} opacity={.4} transparent={true}/>
+                        <meshStandardMaterial roughness={0.5} attach="material" color={"#2d2d2d"} opacity={.2} transparent={true}/>
                     </skinnedMesh>
                 
                     <skinnedMesh
                     geometry={nodes.SteamEngine_2.geometry}
                     //material={materials.Wood}
                     skeleton={nodes.SteamEngine_2.skeleton}
-                    />
+                    >
+                        {
+                            true &&
+                            <meshStandardMaterial roughness={0.5} attach="material" color={"#069dd9"} opacity={.2} transparent={true}/>
+                        }
+                    </skinnedMesh>
+
                     <skinnedMesh
                     geometry={nodes.SteamEngine_3.geometry}
-                    material={materials.Brass}
+                    //material={materials.Brass}
                     skeleton={nodes.SteamEngine_3.skeleton}
-                    />
+                    >
+                        {
+                            true &&
+                            <meshStandardMaterial roughness={0.5} attach="material" color={"#d60270"} opacity={.1} transparent={true}/>
+                        }
+                    </skinnedMesh>
+
                     <skinnedMesh
                     geometry={nodes.SteamEngine_4.geometry}
-                    material={materials.Copper}
+                    //material={materials.Copper}
                     skeleton={nodes.SteamEngine_4.skeleton}
-                    />
+                    >
+                        {
+                            true &&
+                            <meshStandardMaterial roughness={0.5} attach="material" color={"#069dd9"} opacity={.2} transparent={true}/>
+                        }
+                    </skinnedMesh>
+
                 </group>
             </group>
         </group>
