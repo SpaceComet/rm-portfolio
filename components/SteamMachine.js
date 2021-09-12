@@ -33,7 +33,6 @@ export default function Model(props) {
                                 metalness={1}
                                 attach="material"
                                 color={"#A3A3A3"}
-                                attach="material"
                                 opacity={.1}
                                 transparent={true}
                             />
