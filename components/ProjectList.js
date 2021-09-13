@@ -12,7 +12,6 @@ export default function ProjectList({ tittleList, tittleHovered, setTittleHovere
     }));
     
     useEffect(() => {
-        console.log("S-01");
         api.start(i => ({
             scale : tittleHovered == i ? 1.1 : 1,
             blur : tittleHovered == i ? 0 : 4,

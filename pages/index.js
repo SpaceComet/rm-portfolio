@@ -107,6 +107,10 @@ const tittleList = [
         index: 2,
         tittle: 'Higher Power',
     },
+    {
+        index: 3,
+        tittle: 'Dark Waters',
+    },
 ]
 
 const covers = [
@@ -195,7 +199,7 @@ export default function Home() {
                 <div className="absolute inset-0 z-10 overflow-hidden">
                     <div className="flex w-full h-full items-center justify-center">
                         <div className="flex flex-row w-full h-full">
-                            <div className="flex flex-row bg-gray-800 w-5/12 bg-opacity-30">
+                            <div className="hidden md:flex flex-row bg-gray-800 w-5/12 bg-opacity-30">
                                 <div className="flex w-2/12 h-full justify-center items-center">
                                     <div className="font-simplifica text-yellow-300 text-4xl tracking-widest">
                                         <p className="transform -rotate-90">
@@ -212,7 +216,7 @@ export default function Home() {
                                             <p className="font-simplifica  text-yellow-300 text-4xl tracking-widest "> Check latest Reel </p>
                                         </button>
                                     </div>
-                                    <div className="flex items-center h-full z-10">
+                                    <div className="flex items-center h-full">
                                         <ProjectList
                                             tittleList={tittleList}
                                             tittleHovered={tittleHovered}
@@ -222,7 +226,7 @@ export default function Home() {
                                     
                                 </div>
                             </div>
-                            <div className="flex bg-gray-900 w-7/12 bg-opacity-0">
+                            <div className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0">
                                 <CoverList
                                     tittleList={tittleList}
                                     selectedCoverHook={tittleHovered}

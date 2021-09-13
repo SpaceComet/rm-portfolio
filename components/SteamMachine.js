@@ -13,7 +13,6 @@ export default function Model(props) {
     const [hovered, setHover] = useState(false);
 
     useEffect(() => {
-        console.log("A: ", actions);
         actions["ArmatureAction"].play();
     });
     return (

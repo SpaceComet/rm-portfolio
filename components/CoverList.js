@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSprings, animated } from 'react-spring'
 import { useGesture, useDrag } from 'react-use-gesture'
 import { isMobile } from 'react-device-detect';
@@ -6,19 +6,14 @@ import Image from 'next/image'
 
 export default function CoverList({ tittleList, selectedCoverHook, setTittleHovered }) {
 
-    if (typeof window !== 'undefined') {
-        // detect window screen width function
-    }
-
-    //const width = window.innerWidth
     const coverImg = {
-        w: 310,
-        h: 434,
+        w: isMobile ? .70 : .28, 
+        h: .50, 
         margin: {
-            x: 200
+            x: .0
         },
         offset: {
-            x: 100
+            x: 0//100
         }
 
     }
@@ -65,16 +60,17 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
         opacity: 1,
         config: { mass: 1, tension: 600, friction: 30, precision: 0.0001 },
     }));
-    
+
     useEffect(() => {
+
         api.start(i => {
             let pIndex = i - selectedCoverHook - (extraCovers/2);
             //if (selectedCoverHook == 0 && i == lastTittleI)
                 //pIndex = -1;
-
+                
             return ({
-                x: pIndex * (coverImg.w+coverImg.margin.x) + coverImg.offset.x,
-                y: pIndex * (coverImg.h+coverImg.margin.x) * -.5,
+                x: pIndex * ((coverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + coverImg.offset.x,
+                y: pIndex * ((coverImg.h*window.innerHeight)+coverImg.margin.x) * -.5,
                 scale : selectedCoverHook == i - (extraCovers/2) ? 1.1 : 1,
                 blur : selectedCoverHook == i - (extraCovers/2) ? 0 : 6,
                 opacity : selectedCoverHook == i - (extraCovers/2) ? 1 : 0.7,
@@ -83,7 +79,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
     }, [selectedCoverHook]);
 
     return(
-        <div className="flex flex-row h-full w-full z-20 items-center ">{
+        <div className="flex flex-row h-full w-full z-20 items-center justify-center md:justify-start">{
             [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
                 let tmpKey = undefined;
                 if (nMovieI == 0)
@@ -95,7 +91,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
 
                 return(
                     <animated.div 
-                        className="absolute  "
+                        className="absolute w-3/5 md:w-2/12"
                         style={{
                             "touch-action": "none",
                             x: props[nMovieI].x,
@@ -109,10 +105,27 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
                     >
                         <Image 
                             src={`/covers/${tmpKey.replace(/coverCopy_/, 'cover_')}.jpg`}
-                            width={coverImg.w}
-                            height={coverImg.h}
+                            width={5}
+                            height={7}
                             quality={50}
+                            layout="responsive"
                         />
+
+                        {
+                            isMobile &&
+                            <div 
+                                className="flex flex-col font-simplifica tracking-wide mt-10 text-white text-4xl items-center justify-center ">
+                                <div className="flex">
+                                    {
+                                        nMovieI === 0 
+                                        ? tittleList[lastTittleI].tittle
+                                        : nMovieI === lastTittleI+extraCovers
+                                        ? tittleList[0].tittle
+                                        : tittleList[nMovieI-(extraCovers/2)].tittle
+                                    }
+                                </div>
+                            </div>
+                        }
                     </animated.div>
                 )
             })
