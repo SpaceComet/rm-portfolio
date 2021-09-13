@@ -23,7 +23,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
     const lastTittleI = tittleList.length - 1;
 
     // Swipe code (Mobile only)
-    const bind = isMobile && useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
+    const bind = useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
         if (active && Math.abs(mx) > 50) {
             if(xDir < 0) {
                 // swipeLeft
@@ -82,18 +82,22 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
         <div className="flex flex-row h-full w-full z-20 items-center justify-center md:justify-start">{
             [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
                 let tmpKey = undefined;
+                let tmpCoverTittle = "";
+
                 if (nMovieI == 0)
-                    tmpKey = "coverCopy_"+tittleList[lastTittleI].tittle.replace(/ /g, '');
+                    tmpCoverTittle = "coverCopy_"+tittleList[lastTittleI].tittle
                 else if (nMovieI == lastTittleI+extraCovers)
-                    tmpKey = "coverCopy_"+tittleList[0].tittle.replace(/ /g, '');
+                    tmpCoverTittle = "coverCopy_"+tittleList[0].tittle
                 else
-                    tmpKey = "cover_"+tittleList[nMovieI-(extraCovers/2)].tittle.replace(/ /g, '');
+                    tmpCoverTittle = tittleList[nMovieI-(extraCovers/2)].tittle
+
+                tmpKey = "cover_"+tmpCoverTittle.replace(/ /g, '');
 
                 return(
                     <animated.div 
                         className="absolute w-3/5 md:w-2/12"
                         style={{
-                            "touch-action": "none",
+                            "touchAction": "none",
                             x: props[nMovieI].x,
                             y: props[nMovieI].y,
                             scale: props[nMovieI].scale,
@@ -104,11 +108,12 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
                         {...(isMobile && bind())}
                     >
                         <Image 
-                            src={`/covers/${tmpKey.replace(/coverCopy_/, 'cover_')}.jpg`}
+                            src={`/covers/${tmpKey.replace(/coverCopy_/, '')}.jpg`}
                             width={5}
                             height={7}
-                            quality={50}
+                            quality={40}
                             layout="responsive"
+                            alt={`Cover of ${tmpCoverTittle.replace(/coverCopy_/, '')}`}
                         />
 
                         {
@@ -116,13 +121,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
                             <div 
                                 className="flex flex-col font-simplifica tracking-wide mt-10 text-white text-4xl items-center justify-center ">
                                 <div className="flex">
-                                    {
-                                        nMovieI === 0 
-                                        ? tittleList[lastTittleI].tittle
-                                        : nMovieI === lastTittleI+extraCovers
-                                        ? tittleList[0].tittle
-                                        : tittleList[nMovieI-(extraCovers/2)].tittle
-                                    }
+                                    { tmpCoverTittle }
                                 </div>
                             </div>
                         }
