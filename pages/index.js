@@ -226,6 +226,7 @@ export default function Home() {
                                 <CoverList
                                     tittleList={tittleList}
                                     selectedCoverHook={tittleHovered}
+                                    setTittleHovered={setTittleHovered}
                                 />
                             </div>
                         </div>

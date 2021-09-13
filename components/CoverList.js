@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useSprings, animated } from 'react-spring'
+import { useGesture, useDrag } from 'react-use-gesture'
+import { isMobile } from 'react-device-detect';
 import Image from 'next/image'
 
-export default function CoverList({ tittleList, selectedCoverHook }) {
+export default function CoverList({ tittleList, selectedCoverHook, setTittleHovered }) {
 
     if (typeof window !== 'undefined') {
         // detect window screen width function
@@ -24,6 +26,36 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
     // It has to be an even number
     const extraCovers = 2;
     const lastTittleI = tittleList.length - 1;
+
+    // Swipe code (Mobile only)
+    const bind = isMobile && useDrag(({ canceled, first, last, active, movement: [mx], direction: [xDir], cancel }) => {
+        if (active && Math.abs(mx) > 50) {
+            if(xDir < 0) {
+                // swipeLeft
+                setTittleHovered(prevVal => {
+                    let rVal = 0;
+
+                    if (prevVal === lastTittleI) rVal = 0;
+                    else rVal = prevVal + 1;
+
+                    return( rVal )
+                })
+            }
+            else  {
+                // swipeRight
+                setTittleHovered(prevVal => {
+                    let rVal = 0;
+
+                    if (prevVal === 0) rVal = lastTittleI;
+                    else rVal = prevVal - 1;
+
+                    return( rVal )
+                })
+            }
+
+            cancel()
+        }
+    });
 
     const [props, api] = useSprings(tittleList.length+extraCovers, nTittle => ({
         x: (coverImg.w*(nTittle-(extraCovers/2))) + coverImg.offset.x,
@@ -65,6 +97,7 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
                     <animated.div 
                         className="absolute  "
                         style={{
+                            "touch-action": "none",
                             x: props[nMovieI].x,
                             y: props[nMovieI].y,
                             scale: props[nMovieI].scale,
@@ -72,6 +105,7 @@ export default function CoverList({ tittleList, selectedCoverHook }) {
                             opacity: props[nMovieI].opacity,
                         }}
                         key={tmpKey}
+                        {...(isMobile && bind())}
                     >
                         <Image 
                             src={`/covers/${tmpKey.replace(/coverCopy_/, 'cover_')}.jpg`}
