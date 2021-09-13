@@ -199,6 +199,25 @@ export default function Home() {
                 <div className="absolute inset-0 z-10 overflow-hidden">
                     <div className="flex w-full h-full items-center justify-center">
                         <div className="flex flex-row w-full h-full">
+
+                            <div className="absolute h-screen w-screen md:hidden">
+                                <div className="flex w-2/12 h-full justify-center items-center">
+                                    <div className="font-simplifica text-yellow-300 text-2xl tracking-widest">
+                                        <p className="transform -rotate-90 mb-52">
+                                            Projects
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="absolute z-50 h-auto w-screen md:hidden">
+                                <button 
+                                    className=" transition duration-200 mt-14 ml-6 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
+                                    onClick={() => setReelModal(true)}>
+                                    <p className="font-simplifica  text-yellow-300 text-2xl tracking-widest "> Check latest Reel </p>
+                                </button>
+                            </div>
+
                             <div className="hidden md:flex flex-row bg-gray-800 w-5/12 bg-opacity-30">
                                 <div className="flex w-2/12 h-full justify-center items-center">
                                     <div className="font-simplifica text-yellow-300 text-4xl tracking-widest">
@@ -226,6 +245,7 @@ export default function Home() {
                                     
                                 </div>
                             </div>
+
                             <div className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0">
                                 <CoverList
                                     tittleList={tittleList}
