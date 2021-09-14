@@ -1,4 +1,4 @@
-import React, { useRef, useState, Suspense, useCallback, useEffect } from 'react'
+import React, { useRef, useState, Suspense, useCallback, useEffect, Fragment } from 'react'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 //import { Environment, OrbitControls } from "@react-three/drei";
 import { useSpring, useSprings, animated } from 'react-spring'
@@ -258,23 +258,29 @@ export default function Home() {
 
                             {/* -------- Mobile -------- */}
 
-                            <div className="absolute h-screen w-screen md:hidden">
-                                <div className="flex w-2/12 h-full justify-center items-center">
-                                    <div className="font-simplifica text-yellow-300 text-2xl tracking-widest">
-                                        <p className="transform -rotate-90 mb-52">
-                                            Projects
-                                        </p>
+                            {
+                                tittleSelected === undefined &&
+                                <Fragment>
+                                    <div className="absolute h-screen w-screen md:hidden">
+                                        <div className="flex w-2/12 h-full justify-center items-center">
+                                            <div className="font-simplifica text-yellow-300 text-2xl tracking-widest">
+                                                <p className="transform -rotate-90 mb-52">
+                                                    Projects
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div className="absolute z-50 h-auto w-screen md:hidden">
-                                <button 
-                                    className=" transition duration-200 mt-14 ml-6 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
-                                    onClick={() => setReelModal(true)}>
-                                    <p className="font-simplifica  text-yellow-300 text-2xl tracking-widest "> Check latest Reel </p>
-                                </button>
-                            </div>
+                                    <div className="absolute z-50 h-auto w-screen md:hidden">
+                                        <button 
+                                            className=" transition duration-200 mt-14 ml-6 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
+                                            onClick={() => setReelModal(true)}>
+                                            <p className="font-simplifica  text-yellow-300 text-2xl tracking-widest "> Check latest Reel </p>
+                                        </button>
+                                    </div>
+                                </Fragment>
+                            }
+
 
                             {/* -------- Desktop -------- */}
 
@@ -316,7 +322,9 @@ export default function Home() {
                             <animated.div
                                 className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0"
                                 style={{
-                                    ...( windowSize.width > 768 && {width: rsProps.width.to(w => `${w*100}vw`)}),
+                                    ...( windowSize.width > 768
+                                        ? {width: rsProps.width.to(w => `${w*100}vw`)}
+                                        : tittleSelected !== undefined &&  {width: 0}),
                                     visibility: rsProps.opacity.to(o => o === 0 ? 'hidden' : 'visible'),
                                     opacity: rsProps.opacity,
                                 }}>
