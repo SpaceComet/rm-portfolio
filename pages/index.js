@@ -13,6 +13,7 @@ import SteamMachine from "../components/SteamMachine"
 import { isMobileOnly, isTablet, isDesktop, browserName, BrowserView, MobileView, } from 'react-device-detect';
 import ReactPlayer from 'react-player';
 import ProjectList from '../components/ProjectList';
+import ProjectContent from '../components/ProjectContent';
 import CoverList from '../components/CoverList';
 
 const isOrbitControls = true;
@@ -52,7 +53,11 @@ function Loader() {
     const { active, progress, errors, item, loaded, total } = useProgress()
     console.log(progress);
     return(
-        <Html center>{progress} % loaded</Html>
+        <Html center>
+            <div className=" w-screen h-screen bg-gray-900 text-white">
+            {progress} % loaded
+            </div>
+        </Html>
     )
 }
 
@@ -113,16 +118,11 @@ const tittleList = [
     },
 ]
 
-const covers = [
-    '/covers/cover_seeds.jpg',
-    '/covers/cover_LeagueOfGods.jpg',
-    'cover_HigherPower.jpg',
-]
-
 export default function Home() {
 
     // List of projects Hooks
     const [tittleHovered, setTittleHovered] = useState(0);
+    const [tittleSelected, setTittleSelected] = useState(undefined);
 
     // Reel modal hook
     const [isReelModalOn, setReelModal] = useState(false);
@@ -143,8 +143,36 @@ export default function Home() {
     //const rotation = spring.to((x) => console.log(x))
     const scale = spring.to([0, 1], [1, 2])
     
+    // Left Side spring
+    const [lsProps, lsApi] = useSpring( () => ({
+        width: 5/12,
+        height: 100,
+        opacity: 1,
+        config: { mass: 10, tension: 200, friction: 80, precision: 0.0001 },
+    }));
 
-    //console.log(pZ);
+    // Right Side spring
+    const [rsProps, rsApi] = useSpring( () => ({
+        width: 7/12,
+        height: 1, // 1 = 100%
+        opacity: 1,
+        config: { mass: 10, tension: 200, friction: 80, precision: 0.0001 },
+    }));
+
+    useEffect(() => {
+
+        lsApi.start({
+            width: tittleSelected === undefined ? 5/12 : 0,
+            height: 100,
+            opacity: tittleSelected === undefined ? 1 : 0,
+        });
+
+        rsApi.start({
+            width: tittleSelected === undefined ? 7/12 : 0,
+            height: 100,
+            opacity: tittleSelected === undefined ? 1 : 0,
+        });
+    }, [tittleSelected]);
 
 
     return (
@@ -200,6 +228,8 @@ export default function Home() {
                     <div className="flex w-full h-full items-center justify-center">
                         <div className="flex flex-row w-full h-full">
 
+                            {/* -------- Mobile -------- */}
+
                             <div className="absolute h-screen w-screen md:hidden">
                                 <div className="flex w-2/12 h-full justify-center items-center">
                                     <div className="font-simplifica text-yellow-300 text-2xl tracking-widest">
@@ -218,7 +248,16 @@ export default function Home() {
                                 </button>
                             </div>
 
-                            <div className="hidden md:flex flex-row bg-gray-800 w-5/12 bg-opacity-30">
+                            {/* -------- Desktop -------- */}
+
+                            <animated.div 
+                                className="hidden md:flex flex-row bg-gray-900 w-5/12 bg-opacity-30"
+                                style={{
+                                    width: lsProps.width.to(w => `${w*100}vw`),
+                                    visibility: lsProps.opacity.to(o => o === 0 ? 'hidden' : 'visible'),
+                                    opacity: lsProps.opacity,
+                                }}>
+
                                 <div className="flex w-2/12 h-full justify-center items-center">
                                     <div className="font-simplifica text-yellow-300 text-4xl tracking-widest">
                                         <p className="transform -rotate-90">
@@ -244,15 +283,33 @@ export default function Home() {
                                     </div>
                                     
                                 </div>
-                            </div>
+                            </animated.div>
 
-                            <div className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0">
+                            <animated.div
+                                className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0"
+                                style={{
+                                    width: rsProps.width.to(w => `${w*100}vw`),
+                                    visibility: rsProps.opacity.to(o => o === 0 ? 'hidden' : 'visible'),
+                                    opacity: rsProps.opacity,
+                                }}>
+
                                 <CoverList
                                     tittleList={tittleList}
                                     selectedCoverHook={tittleHovered}
                                     setTittleHovered={setTittleHovered}
+                                    tittleSelected={tittleSelected}
+                                    setTittleSelected={setTittleSelected}
                                 />
-                            </div>
+                            </animated.div>
+
+                            {
+                                tittleSelected !== undefined &&
+                                <ProjectContent
+                                    tittleList={tittleList}
+                                    tittleSelected={tittleSelected}
+                                    setTittleSelected={setTittleSelected}
+                                />
+                            }
                         </div>
 
                         {

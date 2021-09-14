@@ -1,10 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSprings, animated } from 'react-spring'
 import { useGesture, useDrag } from 'react-use-gesture'
-import { isMobile } from 'react-device-detect';
+import { isMobile, isMobileOnly } from 'react-device-detect';
 import Image from 'next/image'
+import { IoArrowBackCircleOutline } from "react-icons/io5";
 
-export default function CoverList({ tittleList, selectedCoverHook, setTittleHovered }) {
+export default function CoverList({ tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected }) {
+
+    // Copy from tailwindcss
+    const sm = 640;
+    const md = 768;
+    const lg = 1024;
+    const xl = 1280;
+    const xl_2 = 1536;
 
     const coverImg = {
         w: isMobile ? .70 : .28, 
@@ -13,7 +21,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
             x: .0
         },
         offset: {
-            x: 0//100
+            x: 100//100
         }
 
     }
@@ -63,71 +71,89 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
 
     useEffect(() => {
 
+        const tmpCoverImg = {
+            w: window.innerWidth > md ? .28: .70, 
+        }
+
         api.start(i => {
             let pIndex = i - selectedCoverHook - (extraCovers/2);
             //if (selectedCoverHook == 0 && i == lastTittleI)
                 //pIndex = -1;
                 
             return ({
-                x: pIndex * ((coverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + coverImg.offset.x,
-                y: pIndex * ((coverImg.h*window.innerHeight)+coverImg.margin.x) * -.5,
+                x: pIndex * ((tmpCoverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + (tittleSelected !== undefined && coverImg.offset.x),
+                y: tittleSelected !== undefined
+                    ? pIndex !== 0 ? window.innerHeight : window.innerHeight // window.innerHeight/2 * -0.2
+                    : pIndex * ((coverImg.h*window.innerHeight)+coverImg.margin.x) * -.5,
                 scale : selectedCoverHook == i - (extraCovers/2) ? 1.1 : 1,
                 blur : selectedCoverHook == i - (extraCovers/2) ? 0 : 6,
                 opacity : selectedCoverHook == i - (extraCovers/2) ? 1 : 0.7,
+                ...(tittleSelected !== undefined && {config: { mass: 1, tension: 100, friction: 20, precision: 0.0001 }})
             })
         });
-    }, [selectedCoverHook]);
+    }, [selectedCoverHook, tittleSelected]);
 
     return(
-        <div className="flex flex-row h-full w-full z-20 items-center justify-center md:justify-start">{
-            [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
-                let tmpKey = undefined;
-                let tmpCoverTittle = "";
+        <div className="flex flex-row h-full w-full z-20 items-center justify-center md:justify-start">
 
-                if (nMovieI == 0)
-                    tmpCoverTittle = "coverCopy_"+tittleList[lastTittleI].tittle
-                else if (nMovieI == lastTittleI+extraCovers)
-                    tmpCoverTittle = "coverCopy_"+tittleList[0].tittle
-                else
-                    tmpCoverTittle = tittleList[nMovieI-(extraCovers/2)].tittle
+            {
+                [...Array(tittleList.length+extraCovers).keys()].map((nMovieI) => {
+                    let tmpKey = undefined;
+                    let tmpCoverTittle = "";
 
-                tmpKey = "cover_"+tmpCoverTittle.replace(/ /g, '');
+                    if (nMovieI == 0)
+                        tmpCoverTittle = "coverCopy_"+tittleList[lastTittleI].tittle
+                    else if (nMovieI == lastTittleI+extraCovers)
+                        tmpCoverTittle = "coverCopy_"+tittleList[0].tittle
+                    else
+                        tmpCoverTittle = tittleList[nMovieI-(extraCovers/2)].tittle
 
-                return(
-                    <animated.div 
-                        className="absolute w-3/5 md:w-2/12"
-                        style={{
-                            "touchAction": "none",
-                            x: props[nMovieI].x,
-                            y: props[nMovieI].y,
-                            scale: props[nMovieI].scale,
-                            filter: props[nMovieI].blur.to(s => `blur(${s}px)`),
-                            opacity: props[nMovieI].opacity,
-                        }}
-                        key={tmpKey}
-                        {...(isMobile && bind())}
-                    >
-                        <Image 
-                            src={`/covers/${tmpKey.replace(/coverCopy_/, '')}.jpg`}
-                            width={5}
-                            height={7}
-                            quality={40}
-                            layout="responsive"
-                            alt={`Cover of ${tmpCoverTittle.replace(/coverCopy_/, '')}`}
-                        />
+                    tmpKey = "cover_"+tmpCoverTittle.replace(/ /g, '');
 
-                        {
-                            isMobile &&
-                            <div 
-                                className="flex flex-col font-simplifica tracking-wide mt-10 text-white text-4xl items-center justify-center ">
-                                <div className="flex">
-                                    { tmpCoverTittle }
+                    return(
+                        <animated.div 
+                            className="absolute w-3/5 md:w-2/12"
+                            style={{
+                                "touchAction": "none",
+                                x: props[nMovieI].x,
+                                y: props[nMovieI].y,
+                                scale: props[nMovieI].scale,
+                                filter: props[nMovieI].blur.to(s => `blur(${s}px)`),
+                                opacity: props[nMovieI].opacity,
+                            }}
+                            key={tmpKey}
+                            {...(isMobile && bind())}
+                        >
+                            <Image 
+                                className={`${nMovieI-(extraCovers/2) == selectedCoverHook 
+                                    ? "cursor-pointer"
+                                    : ""
+                                } `}
+                                src={`/covers/${tmpKey.replace(/coverCopy_/, '')}.jpg`}
+                                width={5}
+                                height={7}
+                                quality={40}
+                                layout="responsive"
+                                alt={`Cover of ${tmpCoverTittle.replace(/coverCopy_/, '')}`}
+                                onClick={ () => {
+                                    if (nMovieI-(extraCovers/2) == selectedCoverHook)
+                                        console.log("IN: ",selectedCoverHook)
+                                    setTittleSelected(selectedCoverHook)}}
+                            />
+
+                            {
+                                isMobileOnly &&
+                                <div 
+                                    className="flex flex-col font-simplifica tracking-wide mt-10 text-white text-4xl items-center justify-center ">
+                                    <div className="flex">
+                                        { tmpCoverTittle }
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                    </animated.div>
-                )
-            })
-        }</div>
+                            }
+                        </animated.div>
+                    )
+                })
+            }
+        </div>
     )
 }
