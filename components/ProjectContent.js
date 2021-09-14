@@ -8,7 +8,7 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 export default function ProjectContent({ tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected }) {
     return(
         <div className="flex flex-row w-full h-full">
-            <div className="flex flex-col w-16 h-full justify-center items-center">
+            <div className="flex flex-row md:flex-col w-full md:w-16 h-16 md:h-full justify-center items-center">
                 <IoArrowBackCircleOutline
                     className=" w-10 h-10 text-yellow-300 hover:text-yellow-500 cursor-pointer"
                     onClick={ () => setTittleSelected(undefined)}

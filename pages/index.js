@@ -127,6 +127,12 @@ export default function Home() {
     // Reel modal hook
     const [isReelModalOn, setReelModal] = useState(false);
 
+    // Window's size hook
+    const [windowSize, setWindowSize] = useState({
+        width: undefined,
+        height: undefined,
+    });
+
     const [camPosN, setCamPosN] = useState(0);
 
     const { spring } = useSpring({
@@ -158,6 +164,28 @@ export default function Home() {
         opacity: 1,
         config: { mass: 10, tension: 200, friction: 80, precision: 0.0001 },
     }));
+
+    // Listener to windows resize
+    useEffect(() => {
+        // Handler to call on window resize
+        function handleResize() {
+            console.log("RESIZED");
+            // Set window width/height to state
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        }
+    
+        // Add event listener
+        window.addEventListener("resize", handleResize);
+    
+        // Call handler right away so state gets updated with initial window size
+        handleResize();
+    
+        // Remove event listener on cleanup
+        return () => window.removeEventListener("resize", handleResize);
+    }, []); // Empty array ensures that effect is only run on mount
 
     useEffect(() => {
 
@@ -288,7 +316,7 @@ export default function Home() {
                             <animated.div
                                 className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0"
                                 style={{
-                                    ...( !isMobileOnly && {width: rsProps.width.to(w => `${w*100}vw`)}),
+                                    ...( windowSize.width > 768 && {width: rsProps.width.to(w => `${w*100}vw`)}),
                                     visibility: rsProps.opacity.to(o => o === 0 ? 'hidden' : 'visible'),
                                     opacity: rsProps.opacity,
                                 }}>
