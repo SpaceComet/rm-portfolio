@@ -21,7 +21,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
             x: .0
         },
         offset: {
-            x: 100//100
+            x: 0//100
         }
 
     }
@@ -72,7 +72,7 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
     useEffect(() => {
 
         const tmpCoverImg = {
-            w: window.innerWidth > md ? .28: .70, 
+            w: window.innerWidth >= md ? .28: .70, 
         }
 
         api.start(i => {
@@ -81,7 +81,8 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
                 //pIndex = -1;
                 
             return ({
-                x: pIndex * ((tmpCoverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + (tittleSelected !== undefined && coverImg.offset.x),
+                // x: pIndex * ((tmpCoverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + (tittleSelected !== undefined && coverImg.offset.x),
+                x: pIndex * ((tmpCoverImg.w*window.innerWidth)+(coverImg.margin.x*window.innerWidth)) + coverImg.offset.x,
                 y: tittleSelected !== undefined
                     ? pIndex !== 0 ? window.innerHeight : window.innerHeight // window.innerHeight/2 * -0.2
                     : pIndex * ((coverImg.h*window.innerHeight)+coverImg.margin.x) * -.5,

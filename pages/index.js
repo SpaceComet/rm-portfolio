@@ -288,7 +288,7 @@ export default function Home() {
                             <animated.div
                                 className="flex bg-gray-900 w-full md:w-7/12 bg-opacity-0"
                                 style={{
-                                    width: rsProps.width.to(w => `${w*100}vw`),
+                                    ...( !isMobileOnly && {width: rsProps.width.to(w => `${w*100}vw`)}),
                                     visibility: rsProps.opacity.to(o => o === 0 ? 'hidden' : 'visible'),
                                     opacity: rsProps.opacity,
                                 }}>
