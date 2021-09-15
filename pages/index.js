@@ -15,6 +15,7 @@ import ReactPlayer from 'react-player';
 import ProjectList from '../components/ProjectList';
 import ProjectContent from '../components/ProjectContent';
 import CoverList from '../components/CoverList';
+import NotificationButton from '../components/NotificationButton';
 
 const isOrbitControls = true;
 
@@ -126,6 +127,7 @@ export default function Home() {
 
     // Reel modal hook
     const [isReelModalOn, setReelModal] = useState(false);
+    const [reelNot, setReelNot] = useState(true);
 
     // Window's size hook
     const [windowSize, setWindowSize] = useState({
@@ -272,11 +274,12 @@ export default function Home() {
                                     </div>
 
                                     <div className="absolute z-50 h-auto w-screen md:hidden">
-                                        <button 
-                                            className=" transition duration-200 mt-14 ml-6 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
-                                            onClick={() => setReelModal(true)}>
-                                            <p className="font-simplifica  text-yellow-300 text-2xl tracking-widest "> Check latest Reel </p>
-                                        </button>
+                                        <NotificationButton isAlertOn={reelNot} onClick={() => {
+                                            setReelModal(true);
+                                            setReelNot(false);
+                                        } }>
+                                            Check my latest Reel
+                                        </NotificationButton>
                                     </div>
                                 </Fragment>
                             }
@@ -302,11 +305,12 @@ export default function Home() {
                                 </div>
                                 <div className="flex flex-col w-10/12 h-full">
                                     <div className="absolute z-50">
-                                        <button 
-                                            className=" transition duration-200 mt-20 p-1 bg-gray-800 hover:bg-gray-900 bg-opacity-90 rounded-xl cursor-pointer"
-                                            onClick={() => setReelModal(true)}>
-                                            <p className="font-simplifica  text-yellow-300 text-4xl tracking-widest "> Check latest Reel </p>
-                                        </button>
+                                        <NotificationButton isAlertOn={reelNot} onClick={() => {
+                                            setReelModal(true);
+                                            setReelNot(false);
+                                        } }>
+                                            Check my latest Reel
+                                        </NotificationButton>
                                     </div>
                                     <div className="flex items-center h-full">
                                         <ProjectList
