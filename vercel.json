@@ -1,0 +1,8 @@
+{
+    "functions": {
+        "api/getPosts.js": {
+            "includeFiles": "_files/**"
+        }
+    }
+}
+  
