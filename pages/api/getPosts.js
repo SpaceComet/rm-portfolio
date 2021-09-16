@@ -12,6 +12,9 @@ export default async function handler(req, res) {
         const fullPath = path.join(postsDirectory, postName)
         console.log(fullPath);
 
+        const rdir = await fsp.readdir(path.join(process.cwd()));
+        console.log(rdir);
+
         try {
             await fsp.access(fullPath, fs.constants.F_OK);
             const fileContents = await fsp.readFile(fullPath, 'utf8');
@@ -21,7 +24,7 @@ export default async function handler(req, res) {
             return( res.status(200).json({ metadata: matterResult.data, content: matterResult.content }) );
         } catch (error) {
             console.log(error);
-            return( res.status(404).json({ error: error}) );
+            return( res.status(404).json({ error: error, dir: rdir}) );
         }
 
     }
