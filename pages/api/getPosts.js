@@ -12,7 +12,7 @@ export default async function handler(req, res) {
         const fullPath = path.join(postsDirectory, postName)
         console.log(fullPath);
 
-        const rdir = await fsp.readdir(path.join(process.cwd()));
+        const rdir = await fsp.readdir(path.join(process.cwd(), ".next"));
         console.log(rdir);
 
         try {
