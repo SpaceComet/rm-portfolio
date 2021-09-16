@@ -16,6 +16,7 @@ import ProjectList from '../components/ProjectList';
 import ProjectContent from '../components/ProjectContent';
 import CoverList from '../components/CoverList';
 import NotificationButton from '../components/NotificationButton';
+import useSWR from 'swr'
 
 const isOrbitControls = true;
 
@@ -124,6 +125,11 @@ export default function Home() {
     // List of projects Hooks
     const [tittleHovered, setTittleHovered] = useState(0);
     const [tittleSelected, setTittleSelected] = useState(undefined);
+
+    /*const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
+    console.log(`/api/getPosts?postName=${tmpTittleID}`);
+    const { data, error } = useSWR(`/api/getPosts?postName=${tmpTittleID}`);
+    console.log(data);*/
 
     // Reel modal hook
     const [isReelModalOn, setReelModal] = useState(false);

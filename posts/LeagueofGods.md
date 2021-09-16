@@ -1,8 +1,8 @@
 ---
-Year: 2016
-Role: Compositor/Dynamics
-Software: After Effects, Maya, Mocha Pro
-Studio: Offworld VFX, DreamMax
+year: 2016
+role: Compositor/Dynamics
+software: After Effects, Maya, Mocha Pro
+studio: Offworld VFX, DreamMax
 ---
 # LOG
 > Building...
