@@ -2,17 +2,19 @@ import fs from 'fs'
 import fsp from 'fs/promises';
 import path from 'path'
 import matter from 'gray-matter'
+import getConfig from 'next/config'
 
 export default async function handler(req, res) {
     if (req.method === 'GET' && req.query.postName) {
+        const { serverRuntimeConfig } = getConfig()
         const postName = `${req.query.postName}.md`;
-        const postsDirectory = path.join(__dirname, 'posts');
+        const postsDirectory = path.join(serverRuntimeConfig.PROJECT_ROOT, 'posts');
 
         // Read markdown file as string
         const fullPath = path.join(postsDirectory, postName)
         console.log(fullPath);
 
-        const rdir = await fsp.readdir(path.join(__dirname, "posts"));
+        const rdir = await fsp.readdir(path.join(serverRuntimeConfig.PROJECT_ROOT));
         console.log(rdir);
 
         try {
