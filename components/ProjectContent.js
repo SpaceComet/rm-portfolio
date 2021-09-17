@@ -7,42 +7,12 @@ import { IoArrowBackCircleOutline } from "react-icons/io5";
 import useSWR from 'swr'
 import axios from 'axios';
 
-export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected }) {
+export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected, tittleContent }) {
     
     //console.log(`/api/getPosts?postName=${tmpTittleID}`);
     //const { data, error } = useSWR(() => tittleSelected ? `/api/getPosts?postName=${tmpTittleID}` : null );
 
-    const [dataContent, setDataContent] = useState(undefined);
-
-    useEffect( () => {
-        async function getPost(tittle){
-            try {
-                const postContentRes = await axios.get('/api/getPosts',{
-                    params: {
-                        postName: tittle,
-                    },
-                });
-    
-                if (postContentRes.status){
-                    console.log(postContentRes.status);
-                    if (postContentRes.status >= 200 && postContentRes.status < 300){
-                        const postContent = {...postContentRes.data};
-    
-                        setDataContent(postContent);
-                    }
-                }
-            } catch (error) {
-                console.log(error);
-                setDataContent(undefined);
-            }
-
-        }
-
-        const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
-        getPost(tmpTittleID);
-
-    }, [])
-
+    const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
 
     return(
         <div className="flex flex-col md:flex-row w-full h-full overflow-y-auto md:overflow-hidden">
@@ -72,16 +42,16 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                             { tittleList[tittleSelected].tittle }
                         </p>
                         <p className=" w-full text-2xl mt-4 text-left">
-                            Year: { dataContent !== undefined ? dataContent.metadata.year : "Loading..." }
+                            Year: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.year : "Error" }
                         </p>
                         <p className=" w-full text-2xl text-left">
-                            Role: { dataContent !== undefined ? dataContent.metadata.role : "Loading..." }
+                            Role: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.role : "Error" }
                         </p>
                         <p className=" w-full text-2xl text-left">
-                            Software { dataContent !== undefined ? dataContent.metadata.software : "Loading..." }
+                            Software { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.software : "Error" }
                         </p>
                         <p className=" w-full text-2xl text-left">
-                            Studio/Company: { dataContent !== undefined ? dataContent.metadata.studio : "Loading..." }
+                            Studio/Company: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.studio : "Error" }
                         </p>
                     </div>
                 </div>

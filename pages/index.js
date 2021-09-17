@@ -16,7 +16,7 @@ import ProjectList from '../components/ProjectList';
 import ProjectContent from '../components/ProjectContent';
 import CoverList from '../components/CoverList';
 import NotificationButton from '../components/NotificationButton';
-import useSWR from 'swr'
+import  getAllPosts  from '../lib/posts'
 
 const isOrbitControls = true;
 
@@ -120,7 +120,18 @@ const tittleList = [
     },
 ]
 
-export default function Home() {
+export async function getStaticProps() {
+    const allPostsData = await getAllPosts();
+    console.log(allPostsData);
+
+    return{
+        props: {
+            allPostsData
+        }
+    }
+}
+
+export default function Home({ allPostsData }) {
 
     // List of projects Hooks
     const [tittleHovered, setTittleHovered] = useState(0);
@@ -354,6 +365,7 @@ export default function Home() {
                                     tittleList={tittleList}
                                     tittleSelected={tittleSelected}
                                     setTittleSelected={setTittleSelected}
+                                    tittleContent={allPostsData}
                                 />
                             }
                         </div>
