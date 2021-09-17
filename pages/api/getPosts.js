@@ -6,13 +6,13 @@ import matter from 'gray-matter'
 export default async function handler(req, res) {
     if (req.method === 'GET' && req.query.postName) {
         const postName = `${req.query.postName}.md`;
-        const postsDirectory = path.join(process.cwd(), 'posts');
+        const postsDirectory = path.join(__dirname, 'posts');
 
         // Read markdown file as string
         const fullPath = path.join(postsDirectory, postName)
         console.log(fullPath);
 
-        const rdir = await fsp.readdir(path.join(process.cwd(), ".next"));
+        const rdir = await fsp.readdir(path.join(__dirname, "posts"));
         console.log(rdir);
 
         try {
