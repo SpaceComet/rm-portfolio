@@ -8,9 +8,6 @@ import useSWR from 'swr'
 import axios from 'axios';
 
 export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected, tittleContent }) {
-    
-    //console.log(`/api/getPosts?postName=${tmpTittleID}`);
-    //const { data, error } = useSWR(() => tittleSelected ? `/api/getPosts?postName=${tmpTittleID}` : null );
 
     const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
 

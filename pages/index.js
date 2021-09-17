@@ -122,7 +122,6 @@ const tittleList = [
 
 export async function getStaticProps() {
     const allPostsData = await getAllPosts();
-    console.log(allPostsData);
 
     return{
         props: {
@@ -136,11 +135,6 @@ export default function Home({ allPostsData }) {
     // List of projects Hooks
     const [tittleHovered, setTittleHovered] = useState(0);
     const [tittleSelected, setTittleSelected] = useState(undefined);
-
-    /*const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
-    console.log(`/api/getPosts?postName=${tmpTittleID}`);
-    const { data, error } = useSWR(`/api/getPosts?postName=${tmpTittleID}`);
-    console.log(data);*/
 
     // Reel modal hook
     const [isReelModalOn, setReelModal] = useState(false);
@@ -188,7 +182,6 @@ export default function Home({ allPostsData }) {
     useEffect(() => {
         // Handler to call on window resize
         function handleResize() {
-            console.log("RESIZED");
             // Set window width/height to state
             setWindowSize({
                 width: window.innerWidth,

@@ -139,7 +139,8 @@ export default function CoverList({ tittleList, selectedCoverHook, setTittleHove
                                 onClick={ () => {
                                     if (nMovieI-(extraCovers/2) == selectedCoverHook)
                                         console.log("IN: ",selectedCoverHook)
-                                    setTittleSelected(selectedCoverHook)}}
+                                    setTittleSelected(selectedCoverHook)
+                                }}
                             />
 
                             {
