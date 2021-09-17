@@ -7,10 +7,8 @@ import getConfig from 'next/config'
 export default async function handler(req, res) {
     if (req.method === 'GET' && req.query.postName) {
         const { serverRuntimeConfig } = getConfig()
-        const rdir = await fsp.readdir(path.resolve('public/posts/'));
-        console.log(rdir);
         const postName = `${req.query.postName}.md`;
-        const postsDirectory = path.join(__dirname, './public/posts');
+        const postsDirectory = path.join(__dirname, 'posts');
 
         // Read markdown file as string
         const fullPath = path.join(postsDirectory, postName)
@@ -26,7 +24,7 @@ export default async function handler(req, res) {
             return( res.status(200).json({ metadata: matterResult.data, content: matterResult.content }) );
         } catch (error) {
             console.log(error);
-            return( res.status(404).json({ error: error, dir: rdir}) );
+            return( res.status(404).json({ error: error}) );
         }
 
     }
