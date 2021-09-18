@@ -5,9 +5,12 @@ import { isMobile, isMobileOnly } from 'react-device-detect';
 import Image from 'next/image'
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { MDXRemote } from 'next-mdx-remote'
+import InformationNotice from './informationNotice';
 
 const components = {
-    h1: (props) => <h1 {...props} className="text-4xl" />
+    h1: (props) => <h1 {...props} className="text-4xl" />,
+    img: (props) => <div className="flex items-center justify-center"> <img {...props} /> </div>,
+    InformationNotice
 }
 
 export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected, tittleContent }) {
