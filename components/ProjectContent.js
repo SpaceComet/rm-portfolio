@@ -52,12 +52,11 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                         </p>
                     </div>
                 </div>
-                <div className="flex flex-none flex-col w-full md:w-3/4 h-full md:overflow-y-auto">
-                    <div className=" flex-none h-96 w-full bg-green-900 bg-opacity-10"> Content #01</div>
-                    <div className=" flex-none h-96 w-full bg-yellow-900 bg-opacity-10"> Content #02</div>
-                    <div className=" flex-none h-96 w-full bg-green-900 bg-opacity-10"> Content #03</div>
-                    <div className=" flex-none h-96 w-full bg-yellow-900 bg-opacity-10"> Content #02</div>
-                    <div className=" flex-none h-96 w-full bg-green-900 bg-opacity-10"> Content #03</div>
+                <div className="flex flex-none flex-col w-full md:w-3/4 h-full p-4 md:p-10 backdrop-filter backdrop-blur-sm bg-gray-900 bg-opacity-70 text-white md:overflow-y-auto">
+                    { tittleContent[tmpTittleID] ? 
+                        <div dangerouslySetInnerHTML={{ __html: tittleContent[tmpTittleID].content }} />
+                        : "Error"
+                    }
                 </div>
             </div>
         </div>

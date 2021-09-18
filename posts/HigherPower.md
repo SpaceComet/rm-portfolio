@@ -6,3 +6,6 @@ studio: Offworld VFX
 ---
 # LOG
 > Building...
+
+This is just a test ~~or not~~
+This should contain something **important**
