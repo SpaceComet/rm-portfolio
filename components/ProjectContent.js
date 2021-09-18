@@ -4,12 +4,16 @@ import { useGesture, useDrag } from 'react-use-gesture'
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import Image from 'next/image'
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import useSWR from 'swr'
-import axios from 'axios';
+import { MDXRemote } from 'next-mdx-remote'
+
+const components = {
+    h1: (props) => <h1 {...props} className="text-4xl" />
+}
 
 export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected, tittleContent }) {
 
     const tmpTittleID = tittleList[tittleSelected].tittle.replace(/ /g, '');
+    console.log(tittleContent[tmpTittleID].metadata.software);
 
     return(
         <div className="flex flex-col md:flex-row w-full h-full overflow-y-auto md:overflow-hidden">
@@ -44,8 +48,29 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                         <p className=" w-full text-2xl text-left">
                             Role: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.role : "Error" }
                         </p>
-                        <p className=" w-full text-2xl text-left">
-                            Software { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.software : "Error" }
+                        <p className="flex flex-row w-full text-2xl text-left items-center">
+                            Software { tittleContent[tmpTittleID] 
+                                ? tittleContent[tmpTittleID].metadata.software.map( software => {
+                                    const softwareID = software.replace(/ /g, '');
+                                    return(
+                                        <div
+                                            className="w-10 h-10 ml-4 opacity-50"
+                                            key={softwareID}>
+
+                                            <Image 
+                                                src={`/icons/icon_${softwareID}.png`}
+                                                width={4}
+                                                height={4}
+                                                quality={40}
+                                                layout="responsive"
+                                                alt={`Icon of ${software}`}
+                                            />
+
+                                        </div>
+                                    )
+                                })
+                                : "Error" 
+                            }
                         </p>
                         <p className=" w-full text-2xl text-left">
                             Studio/Company: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.studio : "Error" }
@@ -53,10 +78,7 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                     </div>
                 </div>
                 <div className="flex flex-none flex-col w-full md:w-3/4 h-full p-4 md:p-10 backdrop-filter backdrop-blur-sm bg-gray-900 bg-opacity-70 text-white md:overflow-y-auto">
-                    { tittleContent[tmpTittleID] ? 
-                        <div dangerouslySetInnerHTML={{ __html: tittleContent[tmpTittleID].content }} />
-                        : "Error"
-                    }
+                    <MDXRemote {...tittleContent[tmpTittleID].source} components={components} />
                 </div>
             </div>
         </div>
