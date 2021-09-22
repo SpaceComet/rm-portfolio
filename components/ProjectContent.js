@@ -3,6 +3,7 @@ import { useSprings, animated } from 'react-spring'
 import { useGesture, useDrag } from 'react-use-gesture'
 import { isMobile, isMobileOnly } from 'react-device-detect';
 import Image from 'next/image'
+import Link from 'next/link'
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { MDXRemote } from 'next-mdx-remote'
 import InformationNotice from './informationNotice';
@@ -16,6 +17,7 @@ const components = {
     h5: (props) => <h1 {...props} className="text-4xl my-5 font-simplifica tracking-wider" />,
     h6: (props) => <h1 {...props} className="text-3xl my-5 font-simplifica tracking-wider" />,
     p: (props) => <p {...props} className="text-2xl lg:text-3xl font-simplifica tracking-wide " />,
+    a: Link,
     img: (props) => 
         <div className="flex items-center justify-center my-5">
             <div className="w-11/12 md:w-3/4">
@@ -75,7 +77,7 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                         <p className=" w-full text-2xl text-left">
                             Role: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.role : "Error" }
                         </p>
-                        <p className="flex flex-row w-full text-2xl text-left items-center">
+                        <div className="flex flex-row w-full text-2xl text-left items-center">
                             Software { tittleContent[tmpTittleID] 
                                 ? tittleContent[tmpTittleID].metadata.software.map( software => {
                                     const softwareID = software.replace(/ /g, '');
@@ -98,7 +100,7 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                                 })
                                 : "Error" 
                             }
-                        </p>
+                        </div>
                         <p className=" w-full text-2xl text-left">
                             Studio/Company: { tittleContent[tmpTittleID] ? tittleContent[tmpTittleID].metadata.studio : "Error" }
                         </p>
