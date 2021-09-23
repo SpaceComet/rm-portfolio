@@ -46,7 +46,7 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
 
     return(
         <div className="flex flex-col md:flex-row w-full h-full overflow-y-auto md:overflow-hidden">
-            <div className="flex flex-row md:flex-col w-full md:w-16 h-16 md:h-full justify-center items-center">
+            <div className="flex flex-row md:flex-col w-full md:w-16 h-16 md:h-full py-10 md:py-0 justify-center items-center">
                 <IoArrowBackCircleOutline
                     className=" w-10 h-10 text-yellow-300 hover:text-yellow-500 cursor-pointer"
                     onClick={ () => setTittleSelected(undefined)}
@@ -109,7 +109,15 @@ export default function ProjectContent({ tittleId, tittleList, selectedCoverHook
                 <div className="flex flex-none flex-col w-full md:w-3/4 md:h-full p-4 md:p-10 backdrop-filter backdrop-blur-sm bg-gray-900 bg-opacity-50 md:bg-opacity-70 text-white md:overflow-y-auto overscroll-contain">
                     <MDXRemote {...tittleContent[tmpTittleID].source} components={components} />
                 </div>
+
+                <div className=" md:hidden flex flex-row md:flex-col w-full md:w-16 h-16 md:h-full py-10 md:py-0 justify-center items-center">
+                    <IoArrowBackCircleOutline
+                        className=" w-10 h-10 text-yellow-300 hover:text-yellow-500 cursor-pointer"
+                        onClick={ () => setTittleSelected(undefined)}
+                    />
+                </div>
             </div>
+
         </div>
     )
 }
