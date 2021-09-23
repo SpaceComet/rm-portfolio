@@ -17,6 +17,7 @@ import ProjectContent from '../components/ProjectContent';
 import CoverList from '../components/CoverList';
 import NotificationButton from '../components/NotificationButton';
 import  getAllPosts  from '../lib/posts'
+import LoadingPage from '../components/loadingPage';
 
 const isOrbitControls = true;
 
@@ -56,7 +57,7 @@ function Loader() {
     console.log(progress);
     return(
         <Html center>
-            <div className=" w-screen h-screen bg-gray-900 text-white">
+            <div className="absolute w-screen h-screen bg-gray-900 text-white">
             {progress} % loaded
             </div>
         </Html>
@@ -370,11 +371,11 @@ export default function Home({ allPostsData }) {
                                     <div className={` 
                                         ${ (isDesktop || isTablet) && "bg-gray-800"}
                                         ${ isMobileOnly && "bg-gray-800"}
-                                        flex flex-col w-5/6 md:w-2/4 h-2/6 md:h-1/2 p-2 items-center justify-center rounded-lg`
+                                        flex flex-col w-5/6 md:w-8/12 h-2/6 md:h-5/6 p-2 items-center justify-center rounded-lg`
                                     }>
                                         <div className=" w-full items-start">
                                             <div 
-                                                className="flex w-6 h-6 bg-gray-500 hover:bg-gray-900 rounded-lg cursor-pointer items-center justify-center"
+                                                className="flex w-6 h-6 bg-gray-500 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer items-center justify-center"
                                                 onClick={ () => setReelModal(false)}>
                                                 X
                                             </div>
