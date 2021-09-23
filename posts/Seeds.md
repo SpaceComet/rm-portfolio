@@ -1,7 +1,7 @@
 ---
 year: 2018
 role: Compositor/Dynamics
-software: [After Effects, Maya, Mocha Pro]
+software: [After Effects, Maya, Mel, Mocha Pro]
 studio: Offworld VFX
 ---
 
