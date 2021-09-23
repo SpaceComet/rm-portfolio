@@ -9,6 +9,9 @@ studio: Offworld VFX, DreamMax
     Because of lack of permission I can't show original plates.
 </InformationNotice>
 
+<VideoNotice modalLink="https://vimeo.com/599954436">
+    Click here to check the reel for this project
+</VideoNotice>
 
 League of Gods is the first movie I worked on.
 

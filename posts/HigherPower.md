@@ -4,8 +4,9 @@ role: Compositor/IT
 software: [After Effects, Mocha Pro]
 studio: Offworld VFX
 ---
-# LOG
-> Building...
 
-This is just a test ~~or not~~
-This should contain something **important**
+<InformationNotice>
+    Because of lack of permission I can't show original plates.
+</InformationNotice>
+
+
