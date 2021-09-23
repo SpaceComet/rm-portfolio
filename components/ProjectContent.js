@@ -36,7 +36,7 @@ const components = {
             </blockquote>
         </div>,
     InformationNotice,
-    VideoNotice
+    VideoNotice,
 }
 
 export default function ProjectContent({ tittleId, tittleList, selectedCoverHook, setTittleHovered, tittleSelected, setTittleSelected, tittleContent }) {
