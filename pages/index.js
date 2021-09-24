@@ -224,7 +224,8 @@ export default function Home({ allPostsData }) {
                 <meta name="description" content="Ricardo's VFX portfolio"/>
                 <meta name="keywords" content="VFX,postproduction,movies,portfolio"/>
                 <meta name="author" content="Ricardo J Marques Montilla"/>
-                <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="google-site-verification" content="PgdGdWqDz2wGTMMtOfa6nDmW1PUKK1aolTNzFD4876k" />
             </Head>
             <div className="relative bg-gray-900 h-screen w-screen">
                 <Canvas
