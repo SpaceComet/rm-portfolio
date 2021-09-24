@@ -1,4 +1,5 @@
 import React, { useRef, useState, Suspense, useCallback, useEffect, Fragment } from 'react'
+import Head from 'next/head'
 import { Canvas, useFrame, useThree } from "@react-three/fiber"
 //import { Environment, OrbitControls } from "@react-three/drei";
 import { useSpring, useSprings, animated } from 'react-spring'
@@ -57,7 +58,7 @@ function Loader() {
     console.log(progress);
     return(
         <Html center>
-            <div className="absolute w-screen h-screen bg-gray-900 text-white">
+            <div className="fixed z-50 w-screen h-screen bg-gray-900 text-white">
             {progress} % loaded
             </div>
         </Html>
@@ -218,6 +219,13 @@ export default function Home({ allPostsData }) {
 
     return (
         <>
+            <Head>
+                <title>Owlybot Portfolio</title>
+                <meta name="description" content="Ricardo's VFX portfolio"/>
+                <meta name="keywords" content="VFX,postproduction,movies,portfolio"/>
+                <meta name="author" content="Ricardo J Marques Montilla"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+            </Head>
             <div className="relative bg-gray-900 h-screen w-screen">
                 <Canvas
                     className="absolute z-0"
